@@ -1,5 +1,6 @@
 #ignore previous BST files
-BSTTester.java
-BinarySearchTree.java
-BST-Node.java
 *.class
+*.java
+!BSTJava.java
+!BSTJavaTest.java
+
