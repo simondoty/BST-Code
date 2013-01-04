@@ -17,8 +17,7 @@
   	 Default Constructor
   	 */
   	public void BSTNode () {
-  		myLeft = null;
-  		myRight = null;  		
+  		this(null); 		
   	}
 
   	/*
@@ -27,9 +26,7 @@
   	   		initial value of objects myData field
   	 */
   	public void BSTNode (E data){
-  		this.myData = data;
-  		myLeft = null;
-  		myRigth = null;
+  		this(null, null, data);
   	}
 
   	/*
