@@ -45,11 +45,13 @@ public class BSTJava<E extends Comparable<? super E>> {
             this.size++;
             return newNode;
         }
-        int comparison = value.compareTo(root.getValue());        
-        if (comparison > 0)
+        int comparison = value.compareTo(node.getValue());        
+        if (comparison > 0) 
             node.setRight(recursiveAdd(node.getRight(), value));
-        if (comparison < 0)
+        else if (comparison < 0) 
             node.setLeft(recursiveAdd(node.getLeft(), value));
+        else 
+            return node;
         return node;
     }
 
@@ -73,11 +75,11 @@ public class BSTJava<E extends Comparable<? super E>> {
      */
     private BSTNode<E> recursiveRemove(BSTNode<E> node, E value) {
         if (node == null)
-            return node;
-        int comparison = value.compareTo(value);
+            return null;
+        int comparison = value.compareTo(node.getValue());
         if (comparison > 0) 
             node.setRight(recursiveRemove(node.getRight(), value));
-        if (comparison < 0)
+        else if (comparison < 0)
             node.setLeft(recursiveRemove(node.getLeft(), value));
         else { // comparison == 0
             size--;
@@ -89,7 +91,7 @@ public class BSTJava<E extends Comparable<? super E>> {
                 node = node.getRight();
             else {
                 node.setValue(max(node.getLeft()));
-                node.setLeft(recursiveRemove(node.getLeft(), value));
+                node.setLeft(recursiveRemove(node.getLeft(), node.getValue()));
                 size++;
             }
         }
@@ -116,29 +118,20 @@ public class BSTJava<E extends Comparable<? super E>> {
     public boolean isPresent(E value) {
         if (value == null)
             throw new IllegalArgumentException("Value passed is null");
-        if (size == 0)
-            return false;
-        return recursivePresent(root, value);
+        BSTNode<E> temp = root;
+        while(temp != null) {
+            int diff = value.compareTo(temp.getValue());
+            if (diff == 0)
+                return true;
+            else if (diff < 0)
+                temp = temp.getLeft();
+            else
+                temp = temp.getRight();
+        }
+        return false;
     }
 
-    /*
-      isPresent recursive helper
-      @param node:
-            current node to be evaluated against
-      @param value:
-            value to check if present or not
-     */
-    private boolean recursivePresent(BSTNode<E> node, E value) {
-        if (node == null)
-            return false;
-        int comparison = value.compareTo(node.getValue());
-        if (comparison > 0)
-            recursivePresent(node.getRight(), value);
-        if (comparison < 0)
-            recursivePresent(node.getLeft(), value);
-        return true; // if comparison ==  0
-    }
-
+    
     // print tree method for testing purposes only
     public void printTree() {
         printTree(root, "");
