@@ -27,15 +27,72 @@ class Node:
 	def getInfo(self):
 		return self.info
 
+	# set info of node
+	def setInfo(self, info):
+		self.info = info
+
+	# return left child
+	def getLeft(self):
+		return self.left
+
+	# return right child
+	def getRight(self):
+		return self.right
+
+	# set left child
+	def setLeft(self, newLeft):
+		self.left = newLeft
+
+	# set right child
+	def setRight(self, newRight):
+		self.right = newRight
+
+
+
+"""
+Implementation of the Binary Search Tree with methods Add, Remove
+and isPresent. 
+Data members included are root node, and size.
+"""
+
+class BSTPython:
+
+	def __init__(self):
+		self.root = None
+		self.size = 0
+
+	# Add node to 
+	def add(self, info):
+		if self.size == 0:
+			self.root = Node(info)
+			self.size = 1
+		else:
+			# call recursive add helper
+			self.root = self.recursiveAdd(self.root, info)
+
+	#recursive helper for add method
+	def recursiveAdd(self, node, info):
+		if node is None:
+			self.size = self.size + 1
+			newNode = Node(info)
+			return newNode
+		if info < node.getInfo():
+			node.setLeft(self.recursiveAdd(node.getLeft(), info))
+		elif info > node.getInfo():
+			node.setRight(self.recursiveAdd(node.getRight(), info))
+		else:
+			return node
+		return node
+
+	
+
 # test
-newNode = Node("simon")
-print newNode
-print newNode.left
-newNode = Node("simon2", newNode)
-print newNode
-print newNode.left
-print newNode.right
-newNode2 = Node(3, newNode)
-print newNode.getInfo()
-print newNode2.getInfo()
-print 3
+tree = BSTPython()
+print tree.size
+print tree.root
+tree.add(5)
+print tree.root.getInfo()
+print tree.root
+print tree.add(8)
+print tree.root.getRight()
+print tree.root.getLeft()
