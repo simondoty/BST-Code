@@ -25,6 +25,7 @@ class Node:
 
 	# return the data attribute info
 	def getInfo(self):
+
 		return self.info
 
 	# set info of node
@@ -84,15 +85,93 @@ class BSTPython:
 			return node
 		return node
 
+	# Remove node if present
+	def remove(self, info):
+		if self.size == 0:
+			print "Tree is empty"
+			return None
+		self.root = self.recursiveRemove(self.root, info)
+
+	# recursiveRemove helper method
+	def recursiveRemove(self, node, info):
+		if node is None:
+			return None
+		if info < node.getInfo():
+			node.setLeft(self.recursiveRemove(node.getLeft(), info))
+		elif info > node.getInfo():
+			node.setRight(self.recursiveRemove(node.getRight(), info))
+ 		else:
+ 			self.size = self.size - 1
+ 			if node.getRight() is None and node.getLeft() is None:
+ 				node = None
+ 			elif node.getLeft() is None: # there is a right child
+ 				node = node.getRight()
+ 			elif node.getRight() is None:
+ 				node = node.getLeft()
+ 			else:
+ 				self.size = self.size + 1
+ 				node.setInfo(self.max(node.getLeft()))
+ 				node.setLeft(self.recursiveRemove(node.getLeft(), node.getInfo()))
+ 		return node
 	
+	# Max helper method for remove algorithm
+	def max(self, node):
+		while node.getRight() is not None:
+			node = node.getRight()
+		return node.getInfo()
+
+	# isPresent method to check if value is in tree already
+	def isPresent(self, info):
+		if self.size == 0:
+			return False
+		temp = self.root
+		while temp is not None:
+			tempInfo = temp.getInfo()
+			print "printing tempInfo: " + str(tempInfo) + " and info: " + str(info)
+			if tempInfo == info:
+				return True
+			elif tempInfo < info:
+				temp = temp.getRight()
+			else:
+				temp = temp.getLeft()
+		return False
+
+
+	# PrintTree method
+	def printTree(self):
+		self.printTreeInOrder(self.root, "")
+	def printTreeInOrder(self, node, spaces):
+		if node is not None:
+			self.printTreeInOrder(node.getRight(), spaces + "  ")
+			print spaces + str(node)
+			self.printTreeInOrder(node.getLeft(), spaces + "  ")
+
+
+
+
 
 # test
 tree = BSTPython()
-print tree.size
-print tree.root
+print "Tree size is: " + str(tree.size)
+print "Adding 5"
 tree.add(5)
-print tree.root.getInfo()
-print tree.root
-print tree.add(8)
-print tree.root.getRight()
-print tree.root.getLeft()
+print "Printing Tree with 5"
+tree.printTree()
+print "Tree size is: " + str(tree.size)
+print "Adding 10"
+tree.add(10)
+tree.printTree()
+print "Adding 3"
+tree.add(3)
+print "Tree size is: " + str(tree.size)
+tree.printTree()
+tree.add(15)
+tree.printTree()
+tree.add(12)
+tree.printTree()
+print ""
+tree.remove(5)
+tree.printTree()
+print "5 is present: " + str(tree.isPresent(5))
+print "15 is present: " + str(tree.isPresent(15))
+print tree.size

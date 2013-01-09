@@ -18,7 +18,7 @@
  		System.out.println("Printing if 'bello' isPresent in tree: " + t.isPresent("bello")); 
  		System.out.println("Printing if 'bellos' isPresent in tree: " + t.isPresent("bell")); 
  		System.out.println("Printing if 'z' isPresent in tree: " + t.isPresent("z")); 
-        t.remove("helloe");
+        t.remove("bello");
  		System.out.println("removed z");
  		t.printTree();
 
