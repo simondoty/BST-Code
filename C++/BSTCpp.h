@@ -4,6 +4,8 @@
    by simon doty, 1/2013
  */
 #include <cstddef>
+#include <iostream>
+
 // templateed node class
 template< typename T>
 class BSTNode 
@@ -18,26 +20,26 @@ class BSTNode
 		}
 
 		BSTNode<T>* getLeft() {
-			return  &BSTNode<T>(); // replace
+			return _myLeft; // replace
 		}
 
 		BSTNode<T>* getRight() {
-			return  &BSTNode<T>(); // replace
+			return  _myRight; // replace
 		}
 
-		void setRight(BSTNode<T>*) {
-
+		void setRight(BSTNode<T>* newRight) {
+			_myRight = newRight;
 		}
 
-		void setLeft(BSTNode<T>*) {
-
+		void setLeft(BSTNode<T>* newLeft) {
+			_myLeft = newLeft;
 		}
 
 		void setInfo(T info) {
-
+			_myInfo = info;
 		}
 
-	private:
+	//private:
 		// private data members
 		BSTNode<T>* _myRight;
 		BSTNode<T>* _myLeft;
@@ -56,19 +58,53 @@ public:
 	  default constructor
 	 */
 	BSTCpp (T rootInfo) {
-		_size = 0;
-		BSTNode<T> root = BSTNode<T>(rootInfo);
-		_root =  &root;
+		_size = 1;		
+		_root =  new BSTNode<T>(rootInfo);
 	}
- 
+ 	
+ 	/*
+ 	  Destructor to delete values on heap
+ 	 */
+ 	~BSTCpp() {
+ 		delete _root->_myLeft;
+ 		delete _root->_myRight;
+ 		delete _root;
+ 	}
+
 	/*
 	 insert method
 	 @param info:
 	 	value to insert into tree
 	 */
 	void insert(T info) {
+		// use iterative algo
+		BSTNode<T>* temp = _root;
+		BSTNode<T>* newNode;
+		bool insert_node = false;
 
-	}
+		while (!insert_node) {
+
+			if (info < temp->getInfo()) {
+				if (temp->getLeft() == NULL) {
+					temp->_myLeft = new BSTNode<T>(info);
+					insert_node = true;
+				} 
+				else 
+					temp = temp->getLeft();
+			}
+			else if (info > temp->getInfo()) {
+				if (temp->getRight() == NULL) {
+					temp->_myRight = new BSTNode<T>(info);					
+					insert_node = true;
+				}  
+				else 
+					temp = temp->getRight();
+			} else
+				std::cout << "Value to add is already present." << std::endl;
+		}
+		//if (newNode != 0)
+			//delete newNode;
+	}   
 	
 	/*
 	 remove specified value from the tree if present
@@ -85,7 +121,19 @@ public:
 	  	 info is the value to check whether present in tree or not
 	 */
 	bool is_present(T info) {
-		return false; // change
+		if (_size == 0)
+			return false;
+		BSTNode<T>* temp = _root;
+		while (temp != NULL){
+			T tempInfo = temp->getInfo();
+			if (info > tempInfo)
+				temp = temp->getRight();
+			else if (info < tempInfo)
+				temp = temp->getLeft();
+			else
+				return true;
+		}
+		return false; 
 	}
 
 	/*
