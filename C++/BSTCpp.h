@@ -159,7 +159,7 @@ public:
 	BSTNode<T>* recursiveRemove(BSTNode<T>* node, T info) {
 		// base case
 		if (node == NULL)
-			return NULL;
+			return node;
 		T tempInfo = node->getInfo();
 		if (info < tempInfo)
 			node->setLeft(recursiveRemove(node->getLeft(), info));
@@ -167,19 +167,26 @@ public:
 			node->setRight(recursiveRemove(node->getRight(), info));
 		else {
 			_size -= 1;
-			if (node->getRight() == NULL && node->getLeft() == NULL)
-				delete node; //node = NULL;
-			else if (node->getRight() == NULL)
+			if (node->getRight() == NULL && node->getLeft() == NULL) {
+				delete node;
+				node = NULL; //node = NULL;
+			}
+			else if (node->getRight() == NULL) {
+				BSTNode<T>* temp = node;
 				node = node->getLeft();
-			else if (node->getLeft() == NULL)
+				delete temp;
+			}
+			else if (node->getLeft() == NULL) {
+				BSTNode<T>* temp = node;
 				node = node->getRight();
+				delete temp;
+			}
 			else {
 				node->setInfo(max(node->getLeft()));
 				node->setLeft(recursiveRemove(node->getLeft(), node->getInfo()));
 				_size += 1;
 			}
 		}
-
 		return node;
 	}
 
